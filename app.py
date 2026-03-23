@@ -35,10 +35,10 @@ print("Rows:", len(emails))
 print("Labels:", labels.value_counts())
 
 # ===== MODEL =====
-vectorizer = TfidfVectorizer(stop_words='english')
+vectorizer = TfidfVectorizer(stop_words='english' ,ngram_range=(1,2))
 X = vectorizer.fit_transform(emails)
 
-model = MultinomialNB()
+model = MultinomialNB(class_prior=[0.5,0.5])
 model.fit(X, labels)
 
 # ===== ROUTES =====
