@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 import pickle
 
 # load dataset
@@ -26,7 +26,7 @@ vectorizer = TfidfVectorizer(ngram_range=(1,2))
 X = vectorizer.fit_transform(emails)
 
 # model
-model = MultinomialNB(alpha=0.5)
+model = LogisticRegression(max_iter=1000)
 model.fit(X, labels)
 
 # save
