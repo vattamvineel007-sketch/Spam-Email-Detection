@@ -4,32 +4,39 @@ from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 
 app = Flask(__name__)
-data = pd.read_csv("spam.csv", encoding='latin-1', on_bad_lines='skip')
+data = pd.read_csv("spam.csv", encoding='latin-1', sep=',', on_bad_lines='skip')
 
-data = data[['label', 'message']]
+# IF STILL EMPTY → try tab format
+if len(data.columns) == 1:
+    data = pd.read_csv("spam.csv", encoding='latin-1', sep='\t', on_bad_lines='skip')
 
+# force 2 columns
+data = data.iloc[:, :2]
+data.columns = ['label', 'message']
+
+# remove nulls
 data = data.dropna()
 
-data['label'] = data['label'].astype(str)
-data['label'] = data['label'].str.replace('"', '')
+# clean labels
+data['label'] = data['label'].astype(str).str.replace('"', '')
 data['label'] = data['label'].str.strip().str.lower()
 
-print("Unique labels BEFORE map:", data['label'].unique())
+# DEBUG
+print("Labels:", data['label'].unique())
 
+# map
 data['label'] = data['label'].map({'ham': 0, 'spam': 1})
 
-print("After map:", data['label'].unique())
-
+# remove invalid
 data = data.dropna()
 
 emails = data['message']
 labels = data['label']
 
 print("Rows:", len(emails))
-print("Sample:", emails.head(5).tolist())
 
 if len(emails) == 0:
-    raise ValueError("Dataset is EMPTY")
+    raise ValueError("Dataset still EMPTY after fix")
 
 vectorizer = TfidfVectorizer(stop_words=None)
 X = vectorizer.fit_transform(emails)
