@@ -24,11 +24,11 @@ print("Rows:", len(emails))
 print(labels.value_counts())
 
 # vectorize
-vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1,2))
+vectorizer = TfidfVectorizer(stop_words=None, ngram_range=(1,2))
 X = vectorizer.fit_transform(emails)
 
 # model
-model = MultinomialNB()
+model = MultinomialNB(class_prior=[0.4, 0.6])
 model.fit(X, labels)
 
 # save
