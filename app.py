@@ -4,8 +4,11 @@ from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 
 app = Flask(__name__)
+data = pd.read_csv("spam.csv", encoding='latin-1')
 
-data = pd.read_csv("spam.csv")
+data = data[['label', 'message']]
+data = data.dropna()
+data = data[data['label'].isin(['ham', 'spam'])]
 
 data['message'] = data['message'].astype(str)
 
