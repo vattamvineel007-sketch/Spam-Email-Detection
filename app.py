@@ -8,8 +8,8 @@ data = pd.read_csv("spam.csv", encoding='latin-1')
 
 data = data[['label', 'message']]
 data = data.dropna()
-data = data[data['label'].isin(['ham', 'spam']);
-data['label'] = data['label'].map({'ham': 0, 'spam': 1});
+data = data[data['label'].isin(['ham', 'spam'])]
+data['label'] = data['label'].map({'ham': 0, 'spam': 1})
 
 emails = data['message']
 labels = data['label']
