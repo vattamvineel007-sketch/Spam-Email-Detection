@@ -8,13 +8,11 @@ data = pd.read_csv("emails.csv", encoding='latin-1')
 
 # keep only 2 columns
 data = data.iloc[:, :2]
-data.columns = ['text', 'spam']
-
-# remove nulls
+data.columns = ['text', 'spam'] 
 data = data.dropna()
 
-# clean labels
-data['spam'] = data['spam'].astype(int)
+data['text'] = data['text'].str.replace("Subject:", "", regex=False)
+data['text'] = data['text'].str.lower()
 
 # features & labels
 emails = data['text']
@@ -24,11 +22,11 @@ print("Rows:", len(emails))
 print(labels.value_counts())
 
 # vectorize
-vectorizer = TfidfVectorizer(stop_words=None, ngram_range=(1,2))
+vectorizer = TfidfVectorizer(ngram_range=(1,2))
 X = vectorizer.fit_transform(emails)
 
 # model
-model = MultinomialNB(class_prior=[0.4, 0.6])
+model = MultinomialNB(alpha=0.5)
 model.fit(X, labels)
 
 # save
