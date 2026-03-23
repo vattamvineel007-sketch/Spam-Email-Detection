@@ -33,7 +33,7 @@ print("Final rows:", len(data))
 emails = data['message']
 labels = data['label']
 
-vectorizer = TfidfVectorizer()
+vectorizer = TfidfVectorizer(stop_words='english')
 X = vectorizer.fit_transform(emails)
 
 model = MultinomialNB()
