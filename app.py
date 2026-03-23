@@ -6,6 +6,7 @@ import pandas as pd
 app = Flask(__name__)
 
 data = pd.read_csv("spam.csv")
+data = data.dropna()
 
 emails = data["message"]
 labels = data["label"].map({"ham":0, "spam":1})
