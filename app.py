@@ -6,20 +6,13 @@ import pandas as pd
 app = Flask(__name__)
 data = pd.read_csv("spam.csv", encoding='latin-1')
 
-data = data[['v1', 'v2']]
-data.columns = ['label','message']
-
-data['message'] = data['message'].astype(str)
-
-data['label'] = data['label'].astype(str).str.strip().str.lower()
-
-data = data[data['label'].isin(['ham', 'spam'])]
-
-data['label'] = data['label'].map({'ham': 0, 'spam': 1})
+data = data[['label', 'message']]
 data = data.dropna()
+data = data[data['label'].isin(['ham', 'spam']);
+data['label'] = data['label'].map({'ham': 0, 'spam': 1});
 
-emails = data["message"]
-labels = data["label"]
+emails = data['message']
+labels = data['label']
 
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(emails)
