@@ -13,10 +13,8 @@ data.columns = ['label', 'message']
 # clean
 data = data.dropna()
 
-data['label'] = 
-data['label'].astype(str).str.strip().str.lower()
-data['message'] = 
-data['message'].astype(str).str.strip()
+data['label'] = data['label'].astype(str).str.strip().str.lower()
+data['message'] = data['message'].astype(str).str.strip()
 
 # remove empty messages
 data = data[data['message'] != ""]
