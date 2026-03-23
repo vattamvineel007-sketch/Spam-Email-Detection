@@ -6,9 +6,8 @@ import pandas as pd
 app = Flask(__name__)
 data = pd.read_csv("spam.csv", encoding='latin-1')
 
-data = data[['label', 'message']]
-data = data.dropna()
-data = data[data['label'].isin(['ham', 'spam'])]
+data = data[['v1', 'v2']]
+data.columns = ['label','message']
 
 data['message'] = data['message'].astype(str)
 
