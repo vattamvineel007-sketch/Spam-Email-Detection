@@ -4,7 +4,7 @@ from sklearn.naive_bayes import MultinomialNB
 import pandas as pd
 
 app = Flask(__name__)
-data = pd.read_csv("spam.csv", encoding='latin-1', sep=',', on_bad_lines='skip')
+data = pd.read_csv("clean_spam.csv", encoding='latin-1', sep=',', on_bad_lines='skip')
 
 # IF STILL EMPTY → try tab format
 if len(data.columns) == 1:
