@@ -6,24 +6,31 @@ import pandas as pd
 app = Flask(__name__)
 data = pd.read_csv("spam.csv", encoding='latin-1')
 
-data = data[['label', 'message']]
+# remove extra columns if exist
+data = data.iloc[:, :2]
+data.columns = ['label', 'message']
 
+# clean
 data = data.dropna()
 
-# IMPORTANT CLEAN
-data['label'] = data['label'].astype(str).str.strip().str.lower()
+data['label'] = 
+data['label'].astype(str).str.strip().str.lower()
+data['message'] = 
+data['message'].astype(str).str.strip()
 
-# filter after cleaning
+# remove empty messages
+data = data[data['message'] != ""]
+
+# keep only valid labels
 data = data[data['label'].isin(['ham', 'spam'])]
 
-# convert message
-data['message'] = data['message'].astype(str)
-
-# map labels
+# convert labels
 data['label'] = data['label'].map({'ham': 0, 'spam': 1})
 
-# FINAL safety
+# FINAL check
 data = data.dropna()
+
+print("Final rows:", len(data))
 
 emails = data['message']
 labels = data['label']
