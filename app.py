@@ -3,7 +3,7 @@ import pickle
 import os
 
 app = Flask(__name__)
-
+print("NEW CODE RUNNING")
 # load trained files
 model = pickle.load(open("model.pkl", "rb"))
 vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
