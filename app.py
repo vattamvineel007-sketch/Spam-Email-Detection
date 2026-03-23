@@ -24,7 +24,13 @@ data = data.dropna()
 emails = data['message']
 labels = data['label']
 
-vectorizer = TfidfVectorizer(stop_words='english')
+print("Rows:", len(emails))
+print("Sample:", emails.head(10).tolist())
+
+if len(emails) == 0:
+    raise ValueError("Dataset is EMPTY")
+
+vectorizer = TfidfVectorizer(stop_words=None)
 X = vectorizer.fit_transform(emails)
 
 model = MultinomialNB()
