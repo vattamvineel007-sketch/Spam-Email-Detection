@@ -1,56 +1,37 @@
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
 import pickle
 
-# load dataset
-data = pd.read_csv("emails.csv", encoding="latin-1")
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
 
-# keep only needed columns
+# LOAD DATASET
+data = pd.read_csv("emails.csv")
+
+# KEEP ONLY REQUIRED COLUMNS
 data = data[['text', 'spam']]
-
-# remove nulls
 data = data.dropna()
 
-# 🔥 CLEAN TEXT (IMPORTANT)
+# 🔥 CLEAN TEXT (VERY IMPORTANT)
 data['text'] = data['text'].str.replace("Subject:", "", regex=False)
 data['text'] = data['text'].str.lower()
 
-# features & labels
-emails = data['text']
-labels = data['spam']
+# SPLIT
+X = data['text']
+y = data['spam']
 
-print("Rows:", len(emails))
-print(labels.value_counts())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# 🔥 BETTER VECTORIZER
-vectorizer = TfidfVectorizer(
-    stop_words='english',
-    ngram_range=(1,2),
-    min_df=2,
-    max_df=0.9
-)
+# VECTORIZE
+vectorizer = CountVectorizer()
+X_train_vec = vectorizer.fit_transform(X_train)
 
-X = vectorizer.fit_transform(emails)
+# MODEL
+model = MultinomialNB()
+model.fit(X_train_vec, y_train)
 
-# 🔥 MODEL (STRONGER THAN DEFAULT)
-model = MultinomialNB(alpha=0.5)
-
-model.fit(X, labels)
-
-# 🔥 TEST BEFORE SAVING
-test_samples = [
-    "win money now click here",
-    "free prize claim now",
-    "meeting schedule tomorrow",
-    "project discussion"
-]
-
-test_vec = vectorizer.transform(test_samples)
-print("Test Predictions:", model.predict(test_vec))
-
-# save
+# SAVE FILES
 pickle.dump(model, open("model.pkl", "wb"))
 pickle.dump(vectorizer, open("vectorizer.pkl", "wb"))
 
-print("Model & vectorizer saved ✅")
+print("Model & Vectorizer saved ✅")
